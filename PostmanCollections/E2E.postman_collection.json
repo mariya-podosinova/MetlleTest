@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "398ca33d-026b-481b-adbf-a14010c18e7b",
+		"name": "E2E",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SearchForBulbasaur",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseData=pm.response.json();\r",
+							"console.log(responseData[0].name);\r",
+							"pm.environment.set(\"POKERMONNAME\", responseData[0].name);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pokesearch-server.herokuapp.com/api/search?query=bulbasaur",
+					"protocol": "https",
+					"host": [
+						"pokesearch-server",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "bulbasaur"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BulbasaurDetails",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseData=pm.response.json();\r",
+							"console.log(responseData.species.evolution_chain.evolutions[2].name);\r",
+							"pm.environment.set(\"EVOLUTION2\", responseData.species.evolution_chain.evolutions[1].name);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pokesearch-server.herokuapp.com/api/lookup/{{POKERMONNAME}}",
+					"protocol": "https",
+					"host": [
+						"pokesearch-server",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"lookup",
+						"{{POKERMONNAME}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Evolutions2Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Test data type of the response\", () => {\r",
+							"  pm.expect(jsonData).to.be.an(\"object\");\r",
+							"  pm.expect(jsonData.height).to.be.a(\"number\");\r",
+							"  pm.expect(jsonData.weight).to.be.a(\"number\");\r",
+							"  pm.expect(jsonData.types).to.be.a(\"array\");\r",
+							"  pm.expect(jsonData.items).to.be.a(\"array\");\r",
+							"  pm.expect(jsonData[\"species\"].evolution_chain).to.be.a(\"object\");\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pokesearch-server.herokuapp.com/api/lookup/{{EVOLUTION2}}",
+					"protocol": "https",
+					"host": [
+						"pokesearch-server",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"lookup",
+						"{{EVOLUTION2}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
